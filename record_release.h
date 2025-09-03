@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/2/2025
+ * 9/3/2025
  * Header for the record release struct
  * Contains function declarations and the record release struct declaration
  */
@@ -8,6 +8,7 @@
 #define RECORD_RELEASE_H
 
 #include <stdint.h>
+#include <stddef.h> // site_t
 
 
 /*ENUM DEFINITIONS*/
@@ -83,5 +84,18 @@ typedef struct record_release
 
 rdate Create_Date(MONTH month, int8_t day, int16_t year);
 record_release Create_Release(RFORMAT format, const char * title, const char * artist, const char * primary_genre, rdate release_date, size_t buff);
+
+// cleanup functions 
+
+void cleanup_release(const record_release * rr);
+
+// functions that work on `record_release`
+
+/* Function that compares where the position in a sorted list of releases a certain release should be.
+ * Returns -1 if "less than"
+ * Returns 0 if "equal"
+ * Returns 1 if "greater than"
+ */
+int8_t compare_release(const record_release * a, const record_release * b);
 
 #endif

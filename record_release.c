@@ -1,3 +1,8 @@
+/* Rosa Knowles
+ * 9/3/2025
+ * Definitions for functions contained in `record_release.h`
+ */
+
 #include "record_release.h"
 
 #include <stdlib.h>
@@ -54,4 +59,63 @@ record_release Create_Release(RFORMAT format, const char * title, const char * a
     strcpy(temp.primary_genre, primary_genre);
 
     return temp;
+}
+
+void cleanup_release(const record_release * rr)
+{
+    // function to free the memory associated with the strings stored in a record release struct
+    free(rr.title);
+    free(rr.artist);
+    free(rr.primary_genre);
+
+    rr.ttile = NULL;
+    rr.artist = NULL;
+    rr.primary_genre = NULL;
+}
+
+int8_t compare_release(const record_release * a, const record_release * b)
+{
+    /* Function that compares where the position in a sorted list of releases a certain release should be.
+    * Returns -1 if "less than"
+    * Returns 0 if "equal"
+    * Returns 1 if "greater than"
+    */
+ 
+    // by format
+    // if the formats of a and b are different, check where they should be placed in comparison to each other.
+    if (a->format != b->format)
+        return (a->format < b->format) ? -1 : 1;
+    
+
+    int8_t temp_bool = 0;
+
+    // by genre
+    // strcmp tuide -> https://www.geeksforgeeks.org/c/strcmp-in-c/
+    temp_bool = strcmp(a->genre, b->genre);
+    if (temp_bool != 0)
+        return (temp_bool < 0) ? -1 : 1;
+
+    // by artist
+    temp_bool = strcmp(a->artist, b->artist);
+    if (temp_bool != 0)
+        return (temp_bool < 0) ? -1 : 1;
+
+    // compare dates
+    // check year first, then month, then day
+    // if the dates are the exact same, nothing is returned in this section
+    if (a->release_date.r_year != b->release_date.r_year)
+        return (a->release_date.r_year < b->release_date.r_year) ? -1 : 1;
+    else if (a->release_date.r_month != b->release_date.r_month)
+        return (a->release_date.r_month < b->release_date.r_month) ? -1 : 1;
+    else if (a->release_date.r_day != b->release_date.r_day)
+        return (a->release_date.r_day < b->release_date.r_day) ? -1 : 1;
+
+
+    // by title
+    temp_bool = strcmp(a->title, b->title);
+    if (temp_bool != 0)
+        return (temp_bool < 0) ? -1 : 1;
+
+    // if the record releases are the exact same, return 0 :)
+    return 0;
 }
