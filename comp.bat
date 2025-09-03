@@ -1,0 +1,1 @@
+gcc -Wall -o main.exe main.c record_release.c
