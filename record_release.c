@@ -64,13 +64,9 @@ record_release Create_Release(RFORMAT format, const char * title, const char * a
 void cleanup_release(const record_release * rr)
 {
     // function to free the memory associated with the strings stored in a record release struct
-    free(rr.title);
-    free(rr.artist);
-    free(rr.primary_genre);
-
-    rr.ttile = NULL;
-    rr.artist = NULL;
-    rr.primary_genre = NULL;
+    free(rr->title);
+    free(rr->artist);
+    free(rr->primary_genre);
 }
 
 int8_t compare_release(const record_release * a, const record_release * b)
@@ -91,7 +87,7 @@ int8_t compare_release(const record_release * a, const record_release * b)
 
     // by genre
     // strcmp tuide -> https://www.geeksforgeeks.org/c/strcmp-in-c/
-    temp_bool = strcmp(a->genre, b->genre);
+    temp_bool = strcmp(a->primary_genre, b->primary_genre);
     if (temp_bool != 0)
         return (temp_bool < 0) ? -1 : 1;
 
