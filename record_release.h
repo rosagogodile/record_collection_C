@@ -8,7 +8,7 @@
 #define RECORD_RELEASE_H
 
 #include <stdint.h>
-#include <stddef.h> // site_t
+#include <stddef.h> // `site_t`
 
 
 /*ENUM DEFINITIONS*/
@@ -78,6 +78,14 @@ typedef struct record_release
 } record_release;
 
 
+typedef struct rr_node
+{
+    // struct that stores a node for a doubly linked list of record releases
+    record_release data;
+    struct rr_node * next;
+} rr_node;
+
+
 /*FUNCTION DECLARATIONS*/
 
 // pseudo-constructors
@@ -97,5 +105,8 @@ void cleanup_release(const record_release * rr);
  * Returns 1 if "greater than"
  */
 int8_t compare_release(const record_release * a, const record_release * b);
+
+// functions for the linked list of record releases 
+void insert_head(rr_node * head, record_release data);
 
 #endif

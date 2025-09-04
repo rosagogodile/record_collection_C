@@ -115,3 +115,14 @@ int8_t compare_release(const record_release * a, const record_release * b)
     // if the record releases are the exact same, return 0 :)
     return 0;
 }
+
+void insert_head(rr_node * head, record_release data)
+{
+    // insert a new node at the head of a list
+
+    rr_node new_head;
+    new_head.data = data;
+    new_head.next = head;
+
+    head = &new_head;
+}
