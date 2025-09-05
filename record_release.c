@@ -259,6 +259,8 @@ static rr_node * split_(rr_node * head)
     // fast pointer moves 2 steps at once, slow pointer moves one step
     // when fast pointer reaches end of list, slow pointer is at the middle of the list 
 
+    // i could also pass the length of the list to find the midpoint, but this works nicely since i don't have to keep track of the list length for this 
+
     while (fast != NULL && fast->next != NULL)
     {
         fast = fast->next->next;
