@@ -8,7 +8,7 @@
 #define RECORD_RELEASE_H
 
 #include <stdint.h>
-#include <stddef.h> // `site_t`
+#include <stddef.h> // `size_t`
 
 // safe size for "released xx/xx/xxxx" is 19 + 10 for the format specifier + 15 for the linebreaks and line starters + 1 for the null terminating character
 // used when calling `rr_string`

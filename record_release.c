@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h> // for `sprintf`
 
 rdate Create_Date(MONTH month, int8_t day, int16_t year)
 {
@@ -188,6 +189,8 @@ void rr_string(const record_release * rr, char * buff, size_t buffer_size)
         default:
             strcat(temp, "unknown");
     }
+
+    strcpy(buff, temp);
 
     free(temp);
 }
