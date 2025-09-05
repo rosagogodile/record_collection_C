@@ -123,6 +123,6 @@ void insert_head(rr_node ** head, record_release data);
 record_release get_record_release(rr_node * head, size_t index);
 
 // mergesort
-rr_node * mergesort(rr_node ** head, size_t len);
+rr_node * mergesort(rr_node * head);
 
 #endif

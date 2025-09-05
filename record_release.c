@@ -234,12 +234,13 @@ record_release get_record_release(rr_node * head, size_t index)
 /* Mergesort pseudocode:
 
     Split the list in half:
-        Pass in the length of the list 
-        Calculate midpoint 
-        Use these indexes to split the list in half
+        Use a fast pointer that moves 2 steps at once, and a slow pointer that moves 1 step at once 
+        When the fast pointer reaches the end of the list, the slow pointer is at the middle 
+        Use this information to split the list in half ^_^ 
 
     Call mergesort on both halves:
         - Recursion!
+        - AGHHHHHHH
 
     Merge the two linked lists after everything:
         - Within this merge function, sort the elements of the linked list recursively.
@@ -248,19 +249,29 @@ record_release get_record_release(rr_node * head, size_t index)
 
 // https://www.geeksforgeeks.org/dsa/merge-sort-for-linked-list/
 
-static rr_node * split_(rr_node ** head, size_t midpoint)
+static rr_node * split_(rr_node * head)
 {
     // function to split a list in half
 
-    // iterate to the midpoint
-    rr_node * current = *head;
-    for (size_t it = 0; it < midpoint - 1; ++it)
+    rr_node * fast = head;
+    rr_node * slow = head;
+
+    // fast pointer moves 2 steps at once, slow pointer moves one step
+    // when fast pointer reaches end of list, slow pointer is at the middle of the list 
+
+    while (fast != NULL && fast->next != NULL)
     {
-        current = current->next;
+        fast = fast->next->next;
+        if (fast != NULL)
+        {
+            slow = slow->next;
+        }
     }
 
-    rr_node * temp = current->next;
-    current->next = NULL;
+    // split the list based off of the midpoint found in the previous loop
+
+    rr_node * temp = slow->next;
+    slow->next = NULL;
     return temp;
 }
 
@@ -285,19 +296,17 @@ static rr_node * merge_(rr_node * a, rr_node * b)
     }
 }
 
-rr_node * mergesort(rr_node ** head, size_t len)
+rr_node * mergesort(rr_node * head)
 {
-    // if the list is empty or has one node, return the list b/c it's already sorted
-    if (len <= 1)
-        return *head;
+    // list is already sorted!
+    // return the head
+    if (head == NULL || head->next == NULL)
+        return head;
 
-    size_t midpoint = len / 2;
+    rr_node * backhalf = split_(head);
 
-    rr_node * second_list = split_(head, midpoint);
+    head = mergesort(head);
+    backhalf = mergesort(backhalf);
 
-    mergesort(head, midpoint);
-    // if the list length is odd, adds one to the mergesort length
-    mergesort(&second_list, midpoint + (len % 2));
-
-    return merge_(head, second_list);
+    return merge_(head, backhalf);
 }
