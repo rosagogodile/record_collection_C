@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/4/2025
+ * 9/5/2025
  * Header for the record release struct
  * Contains function declarations and the record release struct declaration
  */
@@ -120,5 +120,7 @@ void rr_string(const record_release * rr, char * buff, size_t buffer_size);
 // functions for the linked list of record releases 
 
 void insert_head(rr_node * head, record_release data);
+// TODO: Define this function: 
+record_release get_record_release(rr_node * head, size_t index);
 
 #endif

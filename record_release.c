@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/4/2025
+ * 9/5/2025
  * Definitions for functions contained in `record_release.h`
  */
 
@@ -32,8 +32,9 @@ rdate Create_Date(MONTH month, int8_t day, int16_t year)
     }
 
     // if the year is unknown, set the release month to january
+    // if the month is not in the range of accepted values, set the release month to january
     // otherwise, set the release month to the input
-    temp.r_month = (temp.r_year > -1) ? month : JAN;
+    temp.r_month = (temp.r_year > -1 && month >= JAN && month <= DEC) ? month : JAN;
 
     return temp;
 }
