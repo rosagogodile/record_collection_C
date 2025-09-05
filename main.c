@@ -44,9 +44,11 @@ int main(int argc, char ** argv)
     rr_list->next = NULL;
     rr_list->data = Create_Release(VINYL_LP, "Selected Ambient Works 85-92", "Aphex Twin", "Electronic", Create_Date(NOV, 9, 1992), BUFFERSIZE);
     insert_head(&rr_list, Create_Release(VINYL_LP, "Untrue", "Burial", "Electronic", Create_Date(NOV, 5, 2007), BUFFERSIZE));
-    insert_head(&rr_list, Create_Release(VINYL_LP, "brat", "Charli XCX", "Pop", Create_Date(JUN, 7, 2024), BUFFERSIZE));
+    insert_head(&rr_list, Create_Release(VINYL_LP, "Brat", "Charli XCX", "Electronic", Create_Date(JUN, 7, 2024), BUFFERSIZE));
+    insert_head(&rr_list, Create_Release(VINYL_LP, "Fossora", "Bjork", "Electronic", Create_Date(SEP, 30, 2022), BUFFERSIZE));
+    insert_head(&rr_list, Create_Release(VINYL_LP, "Cheetah EP", "Aphex Twin", "Electronic", Create_Date(JUL, 8, 2016), BUFFERSIZE));
 
-    size_t list_len = 3;
+    size_t list_len = 5;
 
     char * str_rep = NULL;
 

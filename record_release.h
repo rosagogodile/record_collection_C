@@ -122,4 +122,7 @@ void rr_string(const record_release * rr, char * buff, size_t buffer_size);
 void insert_head(rr_node ** head, record_release data);
 record_release get_record_release(rr_node * head, size_t index);
 
+// mergesort
+rr_node * mergesort(rr_node ** head, size_t len);
+
 #endif

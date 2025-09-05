@@ -226,3 +226,78 @@ record_release get_record_release(rr_node * head, size_t index)
 
     return current->data;
 }
+
+
+
+/* MERGESORT FUNCTIONS */
+
+/* Mergesort pseudocode:
+
+    Split the list in half:
+        Pass in the length of the list 
+        Calculate midpoint 
+        Use these indexes to split the list in half
+
+    Call mergesort on both halves:
+        - Recursion!
+
+    Merge the two linked lists after everything:
+        - Within this merge function, sort the elements of the linked list recursively.
+
+ */
+
+// https://www.geeksforgeeks.org/dsa/merge-sort-for-linked-list/
+
+static rr_node * split_(rr_node ** head, size_t midpoint)
+{
+    // function to split a list in half
+
+    // iterate to the midpoint
+    rr_node * current = *head;
+    for (size_t it = 0; it < midpoint - 1; ++it)
+    {
+        current = current->next;
+    }
+
+    rr_node * temp = current->next;
+    current->next = NULL;
+    return temp;
+}
+
+static rr_node * merge_(rr_node * a, rr_node * b)
+{
+    // return a or b if the other list is empty 
+    if (a == NULL)
+        return b;
+    else if (b == NULL)
+        return a;
+
+    // recursively merges list while sorting the data using the `compare_release` function
+    if (compare_release(&a->data, &b->data) <= 0) // release should be placed before
+    {
+        a->next = merge_(a->next, b);
+        return a;
+    }
+    else // release should be placed after 
+    {
+        b->next = merge_(a, b->next);
+        return b;
+    }
+}
+
+rr_node * mergesort(rr_node ** head, size_t len)
+{
+    // if the list is empty or has one node, return the list b/c it's already sorted
+    if (len <= 1)
+        return *head;
+
+    size_t midpoint = len / 2;
+
+    rr_node * second_list = split_(head, midpoint);
+
+    mergesort(head, midpoint);
+    // if the list length is odd, adds one to the mergesort length
+    mergesort(&second_list, midpoint + (len % 2));
+
+    return merge_(head, second_list);
+}
