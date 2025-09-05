@@ -31,14 +31,31 @@ void print_record_release(char * buff, const record_release * rr)
 
 int main(int argc, char ** argv)
 {
-    record_release testerA = Create_Release(VINYL_LP, "Selected Ambient Works 85-92", "Aphex Twin", "Electronic", Create_Date(NOV, 9, 1992), BUFFERSIZE);
-    record_release testerB = Create_Release(VINYL_LP, "Untrue", "Burial", "Electronic", Create_Date(NOV, 5, 2007), BUFFERSIZE);
+    // record_release testerA = Create_Release(VINYL_LP, "Selected Ambient Works 85-92", "Aphex Twin", "Electronic", Create_Date(NOV, 9, 1992), BUFFERSIZE);
+    // record_release testerB = Create_Release(VINYL_LP, "Untrue", "Burial", "Electronic", Create_Date(NOV, 5, 2007), BUFFERSIZE);
+
+    // char * str_rep = NULL;
+
+    // print_record_release(str_rep, &testerA);
+    // printf(">\n");
+    // print_record_release(str_rep, &testerB);
+
+    rr_node * rr_list = (rr_node *)malloc(sizeof(rr_node));
+    rr_list->next = NULL;
+    rr_list->data = Create_Release(VINYL_LP, "Selected Ambient Works 85-92", "Aphex Twin", "Electronic", Create_Date(NOV, 9, 1992), BUFFERSIZE);
+    insert_head(&rr_list, Create_Release(VINYL_LP, "Untrue", "Burial", "Electronic", Create_Date(NOV, 5, 2007), BUFFERSIZE));
+    insert_head(&rr_list, Create_Release(VINYL_LP, "brat", "Charli XCX", "Pop", Create_Date(JUN, 7, 2024), BUFFERSIZE));
+
+    size_t list_len = 3;
 
     char * str_rep = NULL;
 
-    print_record_release(str_rep, &testerA);
-    printf(">\n");
-    print_record_release(str_rep, &testerB);
+    for (size_t i = 0; i < list_len; ++i)
+    {
+        record_release temp = get_record_release(rr_list, i);
+        print_record_release(str_rep, &temp);
+        printf(">\n");
+    }
 
     return 0;
 }

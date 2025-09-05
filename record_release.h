@@ -119,8 +119,7 @@ void rr_string(const record_release * rr, char * buff, size_t buffer_size);
 
 // functions for the linked list of record releases 
 
-void insert_head(rr_node * head, record_release data);
-// TODO: Define this function: 
+void insert_head(rr_node ** head, record_release data);
 record_release get_record_release(rr_node * head, size_t index);
 
 #endif

@@ -197,13 +197,32 @@ void rr_string(const record_release * rr, char * buff, size_t buffer_size)
 }
 
 
-void insert_head(rr_node * head, record_release data)
+void insert_head(rr_node ** head, record_release data)
 {
-    // insert a new node at the head of a list
+    // inserts a new node at the head of a list
+    // uses a double pointer to prevent a segfault
 
-    rr_node new_head;
-    new_head.data = data;
-    new_head.next = head;
+    rr_node * new_head = (rr_node *)malloc(sizeof(rr_node));
 
-    head = &new_head;
+    new_head->data = data;
+    new_head->next = *head;
+
+    *head = new_head;
+}
+
+record_release get_record_release(rr_node * head, size_t index)
+{
+    // returns the record release at a specified index of a linked list
+    // not safe!!!!! making sure the index isn't out of range should be managed outside of this function
+
+    rr_node * current = head;
+
+    // list is 0-indexed
+    // navigate to the node at the specified index
+    for (size_t it = 0; it < index; ++it)
+    {
+        current = current->next;
+    }
+
+    return current->data;
 }
