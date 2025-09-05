@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/3/2025
+ * 9/4/2025
  * Definitions for functions contained in `record_release.h`
  */
 
@@ -115,6 +115,83 @@ int8_t compare_release(const record_release * a, const record_release * b)
     // if the record releases are the exact same, return 0 :)
     return 0;
 }
+
+
+size_t get_safe_buff(const record_release * rr)
+{
+    // returns a safe size for the record release
+
+    // check `record_release.h` for a comment explaining why this constant is used
+    size_t safe_buff = SAFE_BUFF_BASE;
+
+    // add on the lengths of the other strings we need to shove inside of the string
+    safe_buff += strlen(rr->artist);
+    safe_buff += strlen(rr->primary_genre);
+    safe_buff += strlen(rr->title);
+
+    return safe_buff;
+}
+
+
+void rr_string(const record_release * rr, char * buff, size_t buffer_size)
+{
+    // converts `rr` into a string representation of itself
+    // copies the string into `buff` 
+
+    /* In the form:
+
+        "> {title}
+         > {artist}
+         > {primary_genre}
+         > Released xx/xx/xxxx
+         > {format converted to str}"
+
+     */
+
+
+    size_t safe_buff = get_safe_buff(rr);
+
+
+    // if string can't be safely copied, exit function
+    if (buffer_size < safe_buff)
+        return;
+
+    char * temp = (char *)malloc(safe_buff * sizeof(char));
+    
+    // formats the string up until the format, which will be handled by a switch case
+    sprintf(temp, "> %s\n> %s\n> %s\n> Released %i/%i/%i\n> ", 
+        rr->title, rr->artist, rr->primary_genre, rr->release_date.r_month, rr->release_date.r_day, rr->release_date.r_year);
+
+    switch (rr->format)
+    {
+        case VINYL_LP:
+            strcat(temp, "12\" Record");
+            break;
+        case VINYL_EP:
+            strcat(temp, "7\" Record");
+            break;
+        case VINYL_10:
+            strcat(temp, "10\" Record");
+            break;
+        case CD:
+            strcat(temp, "CD");
+            break;
+        case CASSETTE:
+            strcat(temp, "Cassette");
+            break;
+        case DIGITAL:
+            strcat(temp, "Digital");
+            break;
+        case SHELLAC:
+            strcat(temp, "Shellac");
+            break;
+        default:
+            strcat(temp, "unknown");
+    }
+
+    free(temp);
+}
+
 
 void insert_head(rr_node * head, record_release data)
 {

@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/3/2025
+ * 9/4/2025
  * Header for the record release struct
  * Contains function declarations and the record release struct declaration
  */
@@ -10,6 +10,10 @@
 #include <stdint.h>
 #include <stddef.h> // `site_t`
 
+// safe size for "released xx/xx/xxxx" is 19 + 10 for the format specifier + 15 for the linebreaks and line starters + 1 for the null terminating character
+// used when calling `rr_string`
+#define SAFE_BUFF_BASE 45
+
 
 /*ENUM DEFINITIONS*/
 
@@ -19,10 +23,12 @@ typedef enum RFORMAT
     // enum that stores the format the record was released on 
     VINYL_LP,
     VINYL_EP,
+    VINYL_10,
     CD,
     CASSETTE,
     DIGITAL,
-    SHELLAC
+    SHELLAC,
+    ERR
 } RFORMAT;
 
 
@@ -106,7 +112,13 @@ void cleanup_release(const record_release * rr);
  */
 int8_t compare_release(const record_release * a, const record_release * b);
 
+// returns a safe size for the string representation of a record release
+size_t get_safe_buff(const record_release * rr);
+// converts a record release to a string
+void rr_string(const record_release * rr, char * buff, size_t buffer_size);
+
 // functions for the linked list of record releases 
+
 void insert_head(rr_node * head, record_release data);
 
 #endif
