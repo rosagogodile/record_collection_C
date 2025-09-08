@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/5/2025
+ * 9/8/2025
  * Definitions for functions contained in `record_release.h`
  */
 
@@ -225,6 +225,50 @@ record_release get_record_release(rr_node * head, size_t index)
     }
 
     return current->data;
+}
+
+void rm_element(rr_node ** head, size_t index)
+{
+    // removes an element at the specified index
+    // not safe!!! making sure the index isn't out of range should be managed outside of this function
+
+    // removes element at a position that isn't the head
+    if (index > 0)
+    {
+
+        rr_node * current = *head;
+
+        for (size_t it = 0; it < index - 1; ++it)
+        {
+            current = current->next;
+        }
+
+        rr_node * temp = current->next;
+        current->next = temp->next;
+
+        // free memory!!!
+        free(temp);
+    }
+    // removes element at the head
+    else
+    {
+        rr_node * old_head = *head;
+        rr_node * new_head = old_head->next;
+        free(old_head);
+        *head = new_head;
+    }
+}
+
+void cleanup_list(rr_node ** head)
+{
+    // removes all elements from a list and frees the associated memory
+    rr_node * temp = *head;
+
+    while (temp != NULL)
+    {
+        rm_element(head, 0);
+        temp = *head;
+    }
 }
 
 

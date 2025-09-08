@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/5/2025
+ * 9/8/2025
  * Header for the record release struct
  * Contains function declarations and the record release struct declaration
  */
@@ -99,7 +99,7 @@ typedef struct rr_node
 rdate Create_Date(MONTH month, int8_t day, int16_t year);
 record_release Create_Release(RFORMAT format, const char * title, const char * artist, const char * primary_genre, rdate release_date, size_t buff);
 
-// cleanup functions 
+// cleanup function
 
 void cleanup_release(const record_release * rr);
 
@@ -121,6 +121,8 @@ void rr_string(const record_release * rr, char * buff, size_t buffer_size);
 
 void insert_head(rr_node ** head, record_release data);
 record_release get_record_release(rr_node * head, size_t index);
+void rm_element(rr_node ** head, size_t index);
+void cleanup_list(rr_node ** head);
 
 // mergesort
 rr_node * mergesort(rr_node * head);
