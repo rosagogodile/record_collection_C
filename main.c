@@ -151,6 +151,11 @@ int main(int argc, char ** argv)
         // else, remove trailing newline
 
         // https://stackoverflow.com/questions/38767967/clear-input-buffer-after-fgets-in-c
+
+        // get pointer to position of the first instance of the newline character in `user_input`
+        // since `user_input` will only be updated from `fgets`, it will either have 1 newline character, or no newline characters
+        // in the case of no newline characters, the buffer overflowed, and `strchr` will return `NULL`
+        // otherwise, we can use pointer arithmetic to replace the trailing newline with a null terminating character
         char * newline_pos = strchr(user_input, '\n');
         if (newline_pos == NULL)
         {
