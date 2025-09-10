@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/9/2025
+ * 9/10/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -12,7 +12,7 @@
 
 #define BUFFERSIZE 50
 
-#define TESTING 1
+
 
 void print_record_release(char * buff, const record_release * rr)
 {
@@ -53,8 +53,19 @@ void print_list(char * buff, rr_node * list)
     }
 }
 
+
+
+
+#define TESTING_LIST 0
+#define TESTING_SUBSTRING 0
+
+/*-----TEST FUNCTIONS-----*/
+// these functions entirely exist for me to experiment with/test other functions :)
+// they are only run if the corresponding define is set to 1
+
 int test_fun()
 {
+    // corresponding define: `TESTING_LIST`
     // function use for testing
 
     // initialize hardcoded list of record releases 
@@ -84,21 +95,106 @@ int test_fun()
     return 0;
 }
 
+int test_substring()
+{
+    // corresponding define: `TESTING_SUBSTRING`
+    // tests pointer math with the `strstr` function for finding substrings
+    char a[] = "this is a test";
+
+    char * c = strstr(a, "a");
+
+    printf("%d\n%s\n%d\n%d\n%d", c == NULL, c, c, a, c-a);
+    return 0;
+}
+
+/*--------------------------------------------------------------------------------*/
+
+
+
+
 
 int main(int argc, char ** argv)
 {
-    // only runs the test code if the program is in testing mode
-    if (TESTING)
+    // only runs the test code if any of the test definitions are set to 1
+    if (TESTING_LIST)
         return test_fun();
+    else if (TESTING_SUBSTRING)
+        return test_substring();
 
 
     // initialize list and list size
     rr_node * rr_list = (rr_node *)malloc(sizeof(rr_node));
     size_t len = 0;
 
-    free(rr_list);
+    // initialize a character buffer that will be used to print list contents
+    char * buff = NULL;
 
-    printf("test\n");
+    // setup loop variables 
+    int8_t prog_loop = 1;
+    // string that will store user input
+    char user_input[BUFFERSIZE];
 
+    // print welcome message 
+    printf("> Welcome to Rosa's Record Organizer!\n");
+
+    while (prog_loop)
+    {
+        printf("> ");
+
+
+        // GET USER INPUT
+
+        // note: `sizeof(user_input)` SHOULD equal `BUFFERSIZE`
+        fgets(user_input, sizeof(user_input), stdin);
+
+        // if input buffer overflowed, flush it
+        // else, remove trailing newline
+
+        // https://stackoverflow.com/questions/38767967/clear-input-buffer-after-fgets-in-c
+        char * newline_pos = strchr(user_input, '\n');
+        if (newline_pos == NULL)
+        {
+            int c;
+            while ((c = getchar()) != EOF && c != '\n');
+        }
+        else 
+        {
+            // use pointer arithmetic to replace the newline character with a null terminating character
+            user_input[newline_pos - user_input] = '\0';
+        }
+
+
+
+        // EXECUTE USER'S COMMAND   
+
+        // case where user inputs nothing
+        if (user_input[0] == '\0')
+        {
+            printf("> No command entered.\n");
+        }
+        // exit program
+        else if (user_input[0] == 'q')
+        {
+            prog_loop = 0;
+        }
+        // help command
+        else if (user_input[0] == 'h')
+        {
+            printf("> `q`: exit program\n");
+        }
+        // command not recognized, tell user how to access the help command
+        else
+        {
+            printf("> Command not recognized\n");
+            printf("> Type `h` for help.\n");
+        }
+    }
+
+    printf("> Exiting program...\n");
+
+    // free memory
+    cleanup_list(&rr_list);
+
+    // program ended with no errors
     return 0;
 }

@@ -1,6 +1,10 @@
 # Rosa Knowles
-# 9/9/2025
+# 9/10/2025
 # makefile for the record collection organizer
+
+# compiles and then runs the program
+run: main.exe
+	./main.exe
 
 # compiles the library into an object file
 # packs it into a static library using the archiver command
@@ -13,10 +17,6 @@ librecord_release.a: record_release.c record_release.h
 # compiles the program using the library and main.c
 main.exe: main.c librecord_release.a
 	gcc -Wall -o main.exe main.c -L . -lrecord_release
-
-# compiles and then runs the program
-run: main.exe
-	./main.exe
 
 # removes all compiled executables and libraries
 clean:

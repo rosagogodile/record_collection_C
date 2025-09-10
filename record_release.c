@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/9/2025
+ * 9/10/2025
  * Definitions for functions contained in `record_release.h`
  */
 
@@ -242,6 +242,8 @@ void rm_element(rr_node ** head, size_t index)
         }
 
         rr_node * temp = current->next;
+        // free memory allocated for the strings
+        cleanup_release(&temp->data);
         current->next = temp->next;
 
         // free memory!!!
@@ -251,6 +253,8 @@ void rm_element(rr_node ** head, size_t index)
     else
     {
         rr_node * old_head = *head;
+        // free memory allocated for the strings
+        cleanup_release(&old_head->data);
         rr_node * new_head = old_head->next;
         free(old_head);
         *head = new_head;
