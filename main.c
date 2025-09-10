@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/8/2025
+ * 9/9/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -11,6 +11,8 @@
 #include "record_release.h"
 
 #define BUFFERSIZE 50
+
+#define TESTING 1
 
 void print_record_release(char * buff, const record_release * rr)
 {
@@ -45,15 +47,16 @@ void print_list(char * buff, rr_node * list)
     // code execution ends when the pointer is null, aka when it reaches the end of the list 
     for (rr_node * it = list; it != NULL; it = it->next)
     {
-        printf(">\n> [%ld]\n>\n", index + 1);
+        printf(">\n> [%lld]\n>\n", index + 1);
         print_record_release(buff, &it->data);
         index++;
     }
 }
 
-
-int main(int argc, char ** argv)
+int test_fun()
 {
+    // function use for testing
+
     // initialize hardcoded list of record releases 
     rr_node * rr_list = (rr_node *)malloc(sizeof(rr_node));
     rr_list->next = NULL;
@@ -77,6 +80,25 @@ int main(int argc, char ** argv)
 
     cleanup_list(&rr_list);
     print_list(str_rep, rr_list);
+
+    return 0;
+}
+
+
+int main(int argc, char ** argv)
+{
+    // only runs the test code if the program is in testing mode
+    if (TESTING)
+        return test_fun();
+
+
+    // initialize list and list size
+    rr_node * rr_list = (rr_node *)malloc(sizeof(rr_node));
+    size_t len = 0;
+
+    free(rr_list);
+
+    printf("test\n");
 
     return 0;
 }

@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/8/2025
+ * 9/9/2025
  * Definitions for functions contained in `record_release.h`
  */
 
@@ -127,9 +127,7 @@ size_t get_safe_buff(const record_release * rr)
     size_t safe_buff = SAFE_BUFF_BASE;
 
     // add on the lengths of the other strings we need to shove inside of the string
-    safe_buff += strlen(rr->artist);
-    safe_buff += strlen(rr->primary_genre);
-    safe_buff += strlen(rr->title);
+    safe_buff += strlen(rr->artist) + strlen(rr->primary_genre) + strlen(rr->title);
 
     return safe_buff;
 }
