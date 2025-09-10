@@ -34,7 +34,7 @@ rdate Create_Date(MONTH month, int8_t day, int16_t year)
     // if the year is unknown, set the release month to january
     // if the month is not in the range of accepted values, set the release month to january
     // otherwise, set the release month to the input
-    temp.r_month = (temp.r_year > -1 && month >= JAN && month <= DEC) ? month : JAN;
+    temp.r_month = (temp.r_year > -1 && month >= JAN && month <= DEC) ? month : ERR;
 
     return temp;
 }
@@ -165,25 +165,25 @@ void rr_string(const record_release * rr, char * buff, size_t buffer_size)
     switch (rr->format)
     {
         case VINYL_LP:
-            strcat(temp, "12\" Record");
+            strcat(temp, VINYL_LP_STR);
             break;
         case VINYL_EP:
-            strcat(temp, "7\" Record");
+            strcat(temp, VINYL_EP_STR);
             break;
         case VINYL_10:
-            strcat(temp, "10\" Record");
+            strcat(temp, VINYL_10_STR);
             break;
         case CD:
-            strcat(temp, "CD");
+            strcat(temp, CD_STR);
             break;
         case CASSETTE:
-            strcat(temp, "Cassette");
+            strcat(temp, CASSETTE_STR);
             break;
         case DIGITAL:
-            strcat(temp, "Digital");
+            strcat(temp, DIGITAL_STR);
             break;
         case SHELLAC:
-            strcat(temp, "Shellac");
+            strcat(temp, SHELLAC_STR);
             break;
         default:
             strcat(temp, "unknown");

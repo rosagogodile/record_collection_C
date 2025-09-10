@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/8/2025
+ * 9/10/2025
  * Header for the record release struct
  * Contains function declarations and the record release struct declaration
  */
@@ -21,21 +21,30 @@
 typedef enum RFORMAT
 {
     // enum that stores the format the record was released on 
-    VINYL_LP,
+    VINYL_LP = 1,
     VINYL_EP,
     VINYL_10,
     CD,
     CASSETTE,
     DIGITAL,
-    SHELLAC,
-    ERR
+    SHELLAC
 } RFORMAT;
+
+// strings that correspond with the formats
+#define VINYL_LP_STR "12\" Record"
+#define VINYL_EP_STR "7\" Record"
+#define VINYL_10_STR "10\" Record"
+#define CD_STR "CD"
+#define CASSETTE_STR "Cassette"
+#define DIGITAL_STR "Digital"
+#define SHELLAC_STR "Shellac"
 
 
 typedef enum MONTH
 {
     // enum that stores the month
     // used for date struct
+    ERR = -1,
     JAN = 1,
     FEB,
     MAR,
