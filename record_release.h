@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/10/2025
+ * 9/12/2025
  * Header for the record release struct
  * Contains function declarations and the record release struct declaration
  */
@@ -27,7 +27,8 @@ typedef enum RFORMAT
     CD,
     CASSETTE,
     DIGITAL,
-    SHELLAC
+    SHELLAC,
+    ERR_F = -1
 } RFORMAT;
 
 // strings that correspond with the formats

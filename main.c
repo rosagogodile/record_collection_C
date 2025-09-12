@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/10/2025
+ * 9/12/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -10,7 +10,7 @@
 
 #include "record_release.h"
 
-#define BUFFERSIZE 50
+#define BUFFERSIZE 75
 
 
 
@@ -54,12 +54,11 @@ void print_list(char * buff, rr_node * list)
 }
 
 
-void cl_in(char * buff)
+void cl_in(char * buff, size_t buff_size)
 {
     // handles command line input
 
-    // note: `sizeof(buff)` SHOULD equal `BUFFERSIZE`
-    fgets(buff, sizeof(buff), stdin);
+    fgets(buff, buff_size, stdin);
 
     // if input buffer overflowed, flush it
     // else, remove trailing newline
@@ -164,19 +163,19 @@ int main(int argc, char ** argv)
     // setup loop variables 
     int8_t prog_loop = 1;
     // string that will store user input
-    char user_input[BUFFERSIZE];
+    char * user_input = (char *)malloc(sizeof(char) * BUFFERSIZE);
 
     // print welcome message 
     printf("> Welcome to Rosa's Record Organizer!\n");
 
-    while (prog_loop)
+    while (prog_loop == 1)
     {
         printf("> ");
 
 
         // GET USER INPUT
 
-        cl_in(user_input);
+        cl_in(user_input, BUFFERSIZE);
 
 
         // EXECUTE USER'S COMMAND   
@@ -196,6 +195,11 @@ int main(int argc, char ** argv)
         {
             printf("> `q`: exit program\n");
             printf("> `add`: add a release to the collection\n");
+            printf("> `echo []`:\n");
+            printf(">\t`n`: print the \"n\"th element in the record collection\n");
+            printf(">\t`*`: print all elements in the record collection\n");
+            printf(">\t`len`: print the number of elements in the record collection\n");
+            printf("> `sort`: organize the record collection\n");
         }
         // command to add a release to the record collection
         else if (strcmp(user_input, "add") == 0)
@@ -207,24 +211,24 @@ int main(int argc, char ** argv)
             char temp_artist[BUFFERSIZE];
             char temp_genre[BUFFERSIZE];
 
-            MONTH temp_month;
-            int8_t temp_day;
-            int16_t temp_year;
+            int8_t temp_month = ERR;
+            int8_t temp_day = 0;
+            int16_t temp_year = 0;
 
             rdate temp_date;
 
-            RFORMAT temp_format;
+            RFORMAT temp_format = ERR_F;
 
             printf(">\n> Title: ");
-            cl_in(temp_title);
+            cl_in(temp_title, BUFFERSIZE);
 
             printf("> Artist: ");
-            cl_in(temp_artist);
+            cl_in(temp_artist, BUFFERSIZE);
 
             // might eventually change this to a list of pre-picked genres
             // will probably want a way to figure out how to not have to hardcode this list
             printf("> Genre: ");
-            cl_in(temp_genre);
+            cl_in(temp_genre, BUFFERSIZE);
 
             // prompt user for release date, and parse their input
             printf("> Release Date: ");
@@ -232,13 +236,14 @@ int main(int argc, char ** argv)
             int8_t input_loop = 1;
             do
             {
-                cl_in(user_input);
+                cl_in(user_input, BUFFERSIZE);
 
                 // check user input
                 // handle the parsed input by jumping to a seperate section of code
-                if (sscanf(user_input, "%d/%d/%d", &temp_month, &temp_day, &temp_year) == 1)
+                if (sscanf(user_input, "%d/%d/%d", &temp_month, &temp_day, &temp_year) == 3)
                 {
                     temp_date = Create_Date(temp_month, temp_day, temp_year);
+                    printf("> %d/%d/%d\n", temp_month, temp_day, temp_year);
 
                     // checks if input is valid
                     if (!(temp_date.r_day < 0 || temp_date.r_year < 0 || temp_date.r_month == ERR))
@@ -268,13 +273,21 @@ int main(int argc, char ** argv)
             do
             {
                 printf("> ");
-                cl_in(user_input);
+                cl_in(user_input, BUFFERSIZE);
 
                 // check if input is valid, and copy the input into `temp_format`
                 // if the input is valid, end the loop
-                if (sscanf(user_input, "%d", &temp_format) == 1 && temp_format >= VINYL_LP && temp_format <= SHELLAC)
+                if (sscanf(user_input, "%d", &temp_format) == 1)
                 {
-                    input_loop = 0;
+                    if (temp_format >= VINYL_LP && temp_format <= SHELLAC)
+                    {
+                        input_loop = 0;
+                    }
+                    else
+                    {
+                        // ensures the loop continues... juuuust in case
+                        input_loop = 1;
+                    }
                 }
             }
             while (input_loop);
@@ -294,6 +307,76 @@ int main(int argc, char ** argv)
 
             // increase list length!!!
             len++;
+
+            // make sure the loop doesn't exit, because it really likes to for some reason
+            prog_loop = 1;
+        }
+        // sort command 
+        // self-explanatory
+        else if (strcmp(user_input, "sort") == 0)
+        {
+            rr_list = mergesort(rr_list);
+            if (rr_list != NULL)
+                printf("> Record collection successfully organized!\n");
+            // if `rr_list` is null, crash the program
+            else
+                return 1;
+        }
+        // echo command
+        // prints out contents relating to the list
+        // the help command explains each of the cases, as well as the comments in this if statement
+        // use pointer math to determine if "echo" is at the front of the user's input string
+        else if (user_input - strstr(user_input, "echo") == 0)
+        {
+            // print nth element in list
+            size_t index = 0;
+
+            // use pointer arithmetic to create a substring that ends after echo
+            char * temp_str = user_input;
+            temp_str += (strlen(user_input) >= 5) ? 5 : strlen(user_input);
+
+            // second argument is a number 
+            if (sscanf(temp_str, "%d", &index) == 1)
+            {
+                // index in range
+                if (index >= 1 && index <= len)
+                {
+                    record_release temp = get_record_release(rr_list, index - 1);
+                    printf(">\n> [%d]\n", index);
+                    print_record_release(buff, &temp);
+                }
+                // index out of range
+                else
+                {
+                    printf("> %d out of range.\n", index);
+                }
+            }
+            // second argument is a string
+            else
+            {
+                // arg: "*"
+                // prints all elements in the list
+                if (strcmp(temp_str, "*") == 0)
+                {
+                    if (len > 0)
+                        print_list(buff, rr_list);
+                    else
+                        printf("> 0 out of range.\n");
+                }
+                // arg: "len"
+                // prints the length of the release list
+                else if (strcmp(temp_str, "len") == 0)
+                {
+                    printf("> %d\n", len);
+                }
+                // second argument is invalid!
+                // print a short error message
+                else
+                {
+                    printf("> \"%s\" not recognized as a valid argument\n", temp_str);
+                }
+            }
+
         }
         // command not recognized, tell user how to access the help command
         else
@@ -307,6 +390,7 @@ int main(int argc, char ** argv)
 
     // free memory
     cleanup_list(&rr_list);
+    free(user_input);
 
     // program ended with no errors
     return 0;
