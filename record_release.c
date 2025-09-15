@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/10/2025
+ * 9/15/2025
  * Definitions for functions contained in `record_release.h`
  */
 
@@ -47,6 +47,7 @@ record_release Create_Release(RFORMAT format, const char * title, const char * a
     temp.release_date = release_date;
     temp.format = format;
 
+    // TODO: CHANGE THIS TO CALLOC INSTEAD OF MALLOC
 
     // allocate memory for the strings
     size_t malloc_size = sizeof(char) * buff;
