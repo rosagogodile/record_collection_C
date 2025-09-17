@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/12/2025
+ * 9/16/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "record_release.h"
+#include "savmgr.h"
 
 #define BUFFERSIZE 75
 
@@ -200,6 +201,7 @@ int main(int argc, char ** argv)
             printf(">\t`*`: print all elements in the record collection\n");
             printf(">\t`len`: print the number of elements in the record collection\n");
             printf("> `sort`: organize the record collection\n");
+            printf("> `save`: save a byte-representation of the record collection to a file\n");
         }
         // command to add a release to the record collection
         else if (strcmp(user_input, "add") == 0)
@@ -321,6 +323,40 @@ int main(int argc, char ** argv)
             // if `rr_list` is null, crash the program
             else
                 return 1;
+        }
+        // save command
+        // saves the record collection to a file in a byte representation
+        else if (strcmp(user_input, "save") == 0)
+        {
+            // open file, handle errors with opening the file
+            // opened in binary mode
+            FILE * save_file = fopen(".sav", "wb");
+            if (save_file == NULL)
+            {
+                fprintf(stderr, "Error opening file!\n");
+                return 1;
+            }
+
+            for (size_t i = 0; i < len; ++i)
+            {
+                uint8_t * byte_arr = NULL;
+
+                // get byte representation of record release at index `i`
+                record_release temp_rr = get_record_release(rr_list, i);
+                size_t byte_arr_len = get_bytearr_rep(&byte_arr, &temp_rr, BUFFERSIZE);
+
+                // write each byte in the array to a file
+                for (size_t j = 0; j < byte_arr_len; ++j)
+                {
+                    fwrite(&byte_arr[j], sizeof(uint8_t), 1, save_file);
+                }
+
+                // `get_bytearr_rep` calls malloc, must free!!!
+                free(byte_arr);
+            }
+
+            // close the save file
+            fclose(save_file);
         }
         // echo command
         // prints out contents relating to the list

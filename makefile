@@ -15,8 +15,8 @@ librecord_release.a: record_release.c record_release.h
 	rm record_release.o
 
 # compiles the program using the library and main.c
-main.exe: main.c librecord_release.a
-	gcc -Wall -Wformat=0 -o main.exe main.c -L . -lrecord_release
+main.exe: main.c savmgr.c librecord_release.a
+	gcc -Wall -Wformat=0 -o main.exe savmgr.c main.c -L . -lrecord_release
 
 # removes all compiled executables and libraries
 clean:

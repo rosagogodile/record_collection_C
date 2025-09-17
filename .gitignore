@@ -2,3 +2,4 @@ main.exe
 .vscode/settings.json
 librecord_release.a
 record_release.o
+.sav

@@ -50,11 +50,12 @@ record_release Create_Release(RFORMAT format, const char * title, const char * a
     // TODO: CHANGE THIS TO CALLOC INSTEAD OF MALLOC
 
     // allocate memory for the strings
-    size_t malloc_size = sizeof(char) * buff;
+    // size_t malloc_size = sizeof(char) * buff;
 
-    temp.title         = (char *)malloc(malloc_size);
-    temp.artist        = (char *)malloc(malloc_size);
-    temp.primary_genre = (char *)malloc(malloc_size);
+    // using calloc here to fill the strings with null characters
+    temp.title         = (char *)calloc(buff, sizeof(char));
+    temp.artist        = (char *)calloc(buff, sizeof(char));
+    temp.primary_genre = (char *)calloc(buff, sizeof(char));
 
     // copy inputs into the newly-allocated memory
     strcpy(temp.title, title);
