@@ -3,3 +3,4 @@ main.exe
 librecord_release.a
 record_release.o
 .sav
+libsavmgr.a
