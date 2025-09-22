@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/16/2025
+ * 9/22/2025
  * Header for code that manages reading and writing save files
  */
 
@@ -14,7 +14,7 @@
 // Note:
 // RFORMAT and MONTH both have a size of 4 bytes
 
-size_t get_bytearr_rep(uint8_t ** byte_array, const record_release * rr, size_t strbuffsize); 
+size_t get_bytearr_rep(uint8_t ** byte_array, const record_release * rr);
 
 
 #endif

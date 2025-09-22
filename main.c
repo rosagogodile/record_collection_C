@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/16/2025
+ * 9/22/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -343,7 +343,7 @@ int main(int argc, char ** argv)
 
                 // get byte representation of record release at index `i`
                 record_release temp_rr = get_record_release(rr_list, i);
-                size_t byte_arr_len = get_bytearr_rep(&byte_arr, &temp_rr, BUFFERSIZE);
+                size_t byte_arr_len = get_bytearr_rep(&byte_arr, &temp_rr);
 
                 // write each byte in the array to a file
                 for (size_t j = 0; j < byte_arr_len; ++j)
