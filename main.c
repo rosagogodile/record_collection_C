@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/22/2025
+ * 9/26/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -156,7 +156,7 @@ int main(int argc, char ** argv)
 
     // initialize list and list size
     rr_node * rr_list = (rr_node *)malloc(sizeof(rr_node));
-    size_t len = 0;
+    int64_t len = 0;
 
     // initialize a character buffer that will be used to print list contents
     char * buff = NULL;
@@ -202,6 +202,7 @@ int main(int argc, char ** argv)
             printf(">\t`len`: print the number of elements in the record collection\n");
             printf("> `sort`: organize the record collection\n");
             printf("> `save`: save a byte-representation of the record collection to a file\n");
+            printf("> `load`: load a byte-representation of the record collection from a file\n");
         }
         // command to add a release to the record collection
         else if (strcmp(user_input, "add") == 0)
@@ -336,6 +337,15 @@ int main(int argc, char ** argv)
                 fprintf(stderr, "Error opening file!\n");
                 return 1;
             }
+            
+            // store the byte size of the list length, as well as the list length
+            // size shouldn't be greater than 8
+            // this will create a lot of zero bytes at the start of the file, but that shouldn't be an issue assuming we're 
+            // using a computer with more than a kilobyte of storage :P
+            uint8_t len_bytes = sizeof(len);
+            fwrite(&len_bytes, sizeof(uint8_t), 1, save_file);
+            fwrite(&len, len_bytes, 1, save_file);
+
 
             for (size_t i = 0; i < len; ++i)
             {
@@ -358,6 +368,22 @@ int main(int argc, char ** argv)
             // close the save file
             fclose(save_file);
         }
+
+        // load command 
+        // loads the record collection from a byte representation in a file
+        else if (strcmp(user_input, "load") == 0)
+        {
+            // empty list
+            cleanup_list(&rr_list);
+
+            // re-initialize the list 
+            rr_list = (rr_node *)malloc(sizeof(rr_node));
+
+            len = read_bytearr_file(&rr_list, ".sav", BUFFERSIZE);
+
+            printf("> Successfully loaded %d elements!\n", len);
+        }
+
         // echo command
         // prints out contents relating to the list
         // the help command explains each of the cases, as well as the comments in this if statement
