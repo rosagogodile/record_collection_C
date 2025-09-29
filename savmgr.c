@@ -95,15 +95,14 @@ static void read_str(FILE * fileptr, char ** str_arr, size_t str_idx)
 
     size_t idx = 0;
 
+    // get byte from file, and move the file pointer by one byte
     while ((c = getc(fileptr)) != EOF)
     {
-        //fread(&c, 1, 1, save_file);
+        // store the byte in the string 
         str_arr[str_idx][idx] = c;
-
-        printf("%d ",c);
-
         idx++;
 
+        // if the end of string has been reached, end the loop
         if (c == 0)
             break;
     }

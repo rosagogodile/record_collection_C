@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/26/2025
+ * 9/29/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -380,8 +380,16 @@ int main(int argc, char ** argv)
             rr_list = (rr_node *)malloc(sizeof(rr_node));
 
             len = read_bytearr_file(&rr_list, ".sav", BUFFERSIZE);
+            rr_list = mergesort(rr_list);
 
-            printf("> Successfully loaded %d elements!\n", len);
+            if (rr_list != NULL)
+            {
+                printf("> Successfully loaded %d elements!\n", len);
+            }
+            else
+            {
+                return FILE_READ_FAILURE;
+            }
         }
 
         // echo command
