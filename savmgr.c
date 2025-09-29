@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/26/2025
+ * 9/29/2025
  * Definitions for functions contained in `savmgr.h`
  */
 
@@ -88,6 +88,28 @@ size_t get_bytearr_rep(uint8_t ** byte_array, const record_release * rr)
 // #define READ_GENRE 7 
 
 
+static void read_str(FILE * fileptr, char ** str_arr, size_t str_idx)
+{
+    // reads a single null-terminated string from a file
+    uint8_t c = 1;
+
+    size_t idx = 0;
+
+    while ((c = getc(fileptr)) != EOF)
+    {
+        //fread(&c, 1, 1, save_file);
+        str_arr[str_idx][idx] = c;
+
+        printf("%d ",c);
+
+        idx++;
+
+        if (c == 0)
+            break;
+    }
+}
+
+
 int64_t read_bytearr_file(rr_node ** head, char * filepath, size_t strbuffsize)
 {
     // reads a file filled with bytes and converts it to a linked list of record releases 
@@ -104,9 +126,9 @@ int64_t read_bytearr_file(rr_node ** head, char * filepath, size_t strbuffsize)
     }
 
     // find the length of the file and store it 
-    fseek(save_file, 0L, SEEK_END);
-    size_t file_len = ftell(save_file);
-    rewind(save_file);
+    // fseek(save_file, 0L, SEEK_END);
+    // size_t file_len = ftell(save_file);
+    // rewind(save_file);
 
     // the number of elements in the linked list of record releases
     size_t num_elements = 0;
@@ -137,23 +159,9 @@ int64_t read_bytearr_file(rr_node ** head, char * filepath, size_t strbuffsize)
 
         char * temp_str_arr[] = {temp_title, temp_artist, temp_genre};
 
-        // read and store each of the 3 strings
-        for (size_t j = 0; j < 3; ++i)
+        for (int j = 0; j < 3; ++j)
         {
-            uint8_t c = 1; 
-
-            size_t idx = 0;
-
-            while (c != '\0')
-            {
-                // read a single byte, and store it in the corresponding string
-                fread(&c, 1, 1, save_file);
-                temp_str_arr[j][idx] = c;
-
-                printf("%d ",c);
-
-                idx++;
-            }
+            read_str(save_file, temp_str_arr, j);
         }
 
         // create a new record release from each of the temporary variables
