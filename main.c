@@ -246,7 +246,7 @@ int main(int argc, char ** argv)
                 if (sscanf(user_input, "%d/%d/%d", &temp_month, &temp_day, &temp_year) == 3)
                 {
                     temp_date = Create_Date(temp_month, temp_day, temp_year);
-                    printf("> %d/%d/%d\n", temp_month, temp_day, temp_year);
+                    // printf("> %d/%d/%d\n", temp_month, temp_day, temp_year);
 
                     // checks if input is valid
                     if (!(temp_date.r_day < 0 || temp_date.r_year < 0 || temp_date.r_month == ERR))
@@ -255,8 +255,17 @@ int main(int argc, char ** argv)
                         continue;
                     }
                 }
+                // ensures that the input loop continues
+                else 
+                {
+                    temp_month = ERR;
+                    temp_day = 0;
+                    temp_year = 0;
 
-                printf("> ");
+                    input_loop = 1;
+                }
+
+                printf("> Release Date: ");
             }
             while (input_loop);
 
