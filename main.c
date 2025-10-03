@@ -1,5 +1,5 @@
 /* Rosa Knowles
- * 9/29/2025
+ * 10/3/2025
  * Main!
  * Contains a handful of useful functions, and the actual program itself.
  */
@@ -203,6 +203,9 @@ int main(int argc, char ** argv)
             printf("> `sort`: organize the record collection\n");
             printf("> `save`: save a byte-representation of the record collection to a file\n");
             printf("> `load`: load a byte-representation of the record collection from a file\n");
+            printf("> `rm []`:\n");
+            printf(">\t`n`: remove the \"n\"th element from the record collection\n");
+            printf(">\t`*`: remove all elements from the record collection\n");
         }
         // command to add a release to the record collection
         else if (strcmp(user_input, "add") == 0)
@@ -382,11 +385,18 @@ int main(int argc, char ** argv)
         // loads the record collection from a byte representation in a file
         else if (strcmp(user_input, "load") == 0)
         {
-            // empty list
-            cleanup_list(&rr_list);
 
-            // re-initialize the list 
-            rr_list = (rr_node *)malloc(sizeof(rr_node));
+            // only empty the list if the length is greater than 0
+            // otherwise some issues can pop up with malloc.... yiiiiikes!
+            if (len > 0)
+            {
+                // empty list
+                cleanup_list(&rr_list);
+
+                // re-initialize the list 
+                rr_list = (rr_node *)malloc(sizeof(rr_node));
+            }
+
 
             len = read_bytearr_file(&rr_list, ".sav", BUFFERSIZE);
             rr_list = mergesort(rr_list);
@@ -457,6 +467,58 @@ int main(int argc, char ** argv)
             }
 
         }
+        // remove command
+        // removes the nth element from the list
+        // use pointer math to figure out if "rm" is at the front of the user's input string
+        else if (user_input - strstr(user_input, "rm") == 0)
+        {
+            // remove nth element in list
+            size_t index = 0;
+
+            // use pointer arithmetic to get a substring that ends right after rm
+            char * temp_str = user_input;
+            temp_str += (strlen(user_input) >= 3) ? 3 : strlen(user_input);
+
+            // second argument is a number
+            if (sscanf(temp_str, "%d", &index) == 1)
+            {
+                // check if index in range
+                if (index >= 1 && index <= len)
+                {
+                    rm_element(&rr_list, index - 1);
+                    printf("> Successfully removed the release at position [%d] !\n", index);
+
+                    len--;
+                }
+                // index out of range
+                else
+                {
+                    printf("> %d out of range.\n", index);
+                }
+            }
+            // second argument is a string
+            else 
+            {
+                // arg: "*"
+                // removes all elements from the list
+                if (strcmp(temp_str, "*") == 0)
+                {
+                    cleanup_list(&rr_list);
+                    rr_list = (rr_node *)malloc(sizeof(rr_node));
+
+                    printf("> Successfully removed %d releases! \n", len);
+
+                    len = 0;
+                }
+                // argument not recognized
+                else
+                {
+                    printf("> \"%s\" not recognized as a valid argument\n", temp_str);
+                }
+
+            }
+        }
+
         // command not recognized, tell user how to access the help command
         else
         {
